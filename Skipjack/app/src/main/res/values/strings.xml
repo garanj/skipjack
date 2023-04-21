@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Skipjack</string>
+    <string name="waiting">Waiting…</string>
+
+    <string name="permissions_explanation">
+         %1$s requires permission to record audio, for tuning to work.
+    </string>
+    <string name="show_permissions">Launch</string>
+</resources>

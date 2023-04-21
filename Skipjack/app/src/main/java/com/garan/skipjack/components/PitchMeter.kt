@@ -1,0 +1,121 @@
+package com.garan.skipjack.components
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Text
+import com.garan.skipjack.model.Note
+import com.garan.skipjack.model.TunedStatus
+import com.garan.skipjack.theme.SkipjackTheme
+import kotlin.math.PI
+import kotlin.math.absoluteValue
+import kotlin.math.cos
+import kotlin.math.sin
+
+const val tunedBoundary = PI / 32
+const val pointerWidth = 20f
+
+@Composable
+fun PitchMeter(info: TunedStatus.TuningInfo) {
+    val animatePitch by animateFloatAsState(
+        targetValue = info.pitchDifference.toFloat(),
+        animationSpec = tween(durationMillis = 200)
+    )
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val brush = Brush.sweepGradient(
+            0.5f to Color.Black,
+            0.7f to info.note.color,
+            0.8f to info.note.color,
+            1f to Color.Black
+        )
+        for (i in 15..45) {
+            val minuteAngle = i * PI / 30
+
+            val radius = if (i % 5 == 0) {
+                center.x - 40f
+            } else {
+                center.x - 20f
+            }
+
+            val endX = this.center.x + center.x * sin(minuteAngle)
+            val endY = this.center.y + center.y * cos(minuteAngle)
+            val startX = this.center.x + radius * sin(minuteAngle)
+            val startY = this.center.y + radius * cos(minuteAngle)
+            drawLine(
+                brush = brush,
+                start = Offset(
+                    startX.toFloat(),
+                    startY.toFloat()
+                ),
+                end = Offset(
+                    endX.toFloat(),
+                    endY.toFloat()
+                ),
+                strokeWidth = 5f
+            )
+        }
+        val angle = animatePitch * PI / 3
+        val drawAngle = angle - PI / 2
+        val startX = this.center.x + 50 * cos(drawAngle)
+        val startY = this.center.y + 50 * sin(drawAngle)
+        val xEnd = center.x + cos(drawAngle) * (center.x - pointerWidth)
+        val yEnd = center.y + sin(drawAngle) * (center.y - pointerWidth)
+        drawLine(
+            color = info.note.color,
+            start = Offset(startX.toFloat(), startY.toFloat()),
+            end = Offset(xEnd.toFloat(), yEnd.toFloat()),
+            strokeWidth = pointerWidth,
+            cap = StrokeCap.Round
+        )
+        if (angle.absoluteValue > tunedBoundary) {
+            drawLine(
+                color = Color.Black,
+                start = Offset(startX.toFloat(), startY.toFloat()),
+                end = Offset(xEnd.toFloat(), yEnd.toFloat()),
+                strokeWidth = pointerWidth - 6,
+                cap = StrokeCap.Round
+            )
+        }
+    }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = info.note.name,
+            style = MaterialTheme.typography.display1,
+            color = info.note.color
+        )
+    }
+}
+
+@Preview(
+    device = Devices.WEAR_OS_LARGE_ROUND,
+    showSystemUi = true,
+    backgroundColor = 0xff000000,
+    showBackground = true
+)
+@Composable
+fun PitchMeterPreview() {
+    val info = TunedStatus.TuningInfo(
+        note = Note.A,
+        pitchDifference = 0.5
+    )
+    SkipjackTheme {
+        PitchMeter(info)
+    }
+}
