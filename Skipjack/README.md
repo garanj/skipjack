@@ -1,7 +1,7 @@
 # Skipjack
 
 ### Overview
-
+ 
 Skipjack is a simple tuning app for Wear OS
 
 <img src="images/tuning1.png" alt="Tuning" height="250" />
