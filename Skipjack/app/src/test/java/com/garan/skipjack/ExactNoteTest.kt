@@ -6,7 +6,7 @@ import org.junit.Assert
 import org.junit.Test
 
 class ExactNoteTest {
-    val DIFFERENCE_TOLERANCE = 0.01
+    private val DIFFERENCE_TOLERANCE = 0.01
 
     @Test
     fun nearestPitchDifference_NoteAzero_equal() {

@@ -31,8 +31,8 @@ const val pointerWidth = 20f
 @Composable
 fun PitchMeter(info: TunedStatus.TuningInfo) {
     val animatePitch by animateFloatAsState(
-        targetValue = info.pitchDifference.toFloat(),
-        animationSpec = tween(durationMillis = 200)
+        targetValue = info.pitchDifference.toFloat().coerceIn(-2.0f, 2.0f),
+        animationSpec = tween(durationMillis = 200), label = ""
     )
 
     Canvas(modifier = Modifier.fillMaxSize()) {

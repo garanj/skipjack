@@ -6,4 +6,19 @@
          %1$s requires permission to record audio, for tuning to work.
     </string>
     <string name="show_permissions">Launch</string>
+
+    <string name="instrument_def_none">None</string>
+    <string name="instrument_def_all_notes">All notes</string>
+    <string name="instrument_def_violin">Violin</string>
+    <string name="instrument_def_viola">Viola</string>
+    <string name="instrument_def_ukelele">Ukelele</string>
+    <string name="instrument_def_cello">Cello</string>
+    <string name="instrument_def_double_bass">Double-Bass</string>
+    <string name="instrument_def_guitar">Guitar</string>
+    <string name="instrument_def_banjo">Banjo</string>
+
+    <string name="tile_label">Skipjack</string>
+    <string name="tile_description">Skipjack tuner</string>
+
+    <string name="tile_more_button">More</string>
 </resources>

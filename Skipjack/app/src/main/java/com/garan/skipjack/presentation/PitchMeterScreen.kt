@@ -6,10 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import com.garan.skipjack.MainActivity
 import com.garan.skipjack.TUNING_NOTE_TIMEOUT_MS
 import com.garan.skipjack.components.PitchMeter
 import com.garan.skipjack.components.PlaceholderPitchMeter
@@ -22,9 +20,6 @@ import kotlinx.coroutines.delay
 fun PitchMeterScreen(
     status: TunedStatus
 ) {
-    val context = LocalContext.current
-    (context as MainActivity).setScreenOn()
-
     var timedout by remember { mutableStateOf(false) }
     LaunchedEffect(status) {
         timedout = false

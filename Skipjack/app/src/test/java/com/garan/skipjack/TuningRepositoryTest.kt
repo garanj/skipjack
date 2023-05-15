@@ -38,7 +38,7 @@ class TuningRepositoryTest {
                 listOf(440f)
             )
         )
-        repo.setTuningGroup(allNamedNotes)
+        repo.setTuningConfig(allNamedNotes)
 
         repo.tuningStatusFlow.test {
             val firstItem = awaitItem()
@@ -60,7 +60,7 @@ class TuningRepositoryTest {
             )
         )
         // Set the TuningRepo to include only one Tuning target: A4
-        repo.setTuningGroup(a4only)
+        repo.setTuningConfig(a4only)
 
         repo.tuningStatusFlow.test {
             val firstItem = awaitItem()
