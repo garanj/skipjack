@@ -3,8 +3,8 @@ package com.garan.skipjack.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.garan.skipjack.TuningRepository
+import com.garan.skipjack.definitions.TuningConfig
 import com.garan.skipjack.model.TunedStatus
-import com.garan.skipjack.model.TuningConfigurationGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -17,7 +17,7 @@ class PitchMeterViewModel @Inject constructor(private val tuningRepository: Tuni
     val tuningStatusFlow = tuningRepository.tuningStatusFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TunedStatus.NoTuningInfo)
 
-    fun setTuningNoteGroup(tuningConfigurationGroup: TuningConfigurationGroup) {
-        tuningRepository.setTuningGroup(tuningConfigurationGroup)
+    fun setTuningNoteGroup(tuningConfig: TuningConfig) {
+        tuningRepository.setTuningConfig(tuningConfig)
     }
 }

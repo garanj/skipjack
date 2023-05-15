@@ -43,6 +43,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    namespace 'com.garan.skipjack'
 }
 
 dependencies {
@@ -72,6 +73,19 @@ dependencies {
     // Audio DSP library
     implementation libs.tarsos.dsp.core
     implementation libs.tarsos.dsp.jvm
+
+    // Horologist
+    implementation libs.horologist.compose.layout
+
+    // Tiles
+    implementation libs.androidx.tiles.material
+    implementation libs.androidx.tiles
+    implementation libs.horologist.tiles
+
+    // Datastore
+    implementation libs.androidx.datastore
+
+    implementation libs.androidx.core.splashscreen
 
     // Tests
     testImplementation libs.junit
