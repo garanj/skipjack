@@ -32,6 +32,14 @@ fun StartMenuScreen(
         item {
             Button(
                 modifier = Modifier.fillMaxWidth(),
+                onClick = { onTuningClick(TuningConfig.WHOLE_NOTES) }
+            ) {
+                Text(stringResource(id = R.string.instrument_def_whole_notes))
+            }
+        }
+        item {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = { onTuningClick(TuningConfig.ALL_NOTES) }
             ) {
                 Text(stringResource(id = R.string.instrument_def_all_notes))

@@ -8,6 +8,7 @@
     <string name="show_permissions">Launch</string>
 
     <string name="instrument_def_none">None</string>
+    <string name="instrument_def_whole_notes">Whole notes</string>
     <string name="instrument_def_all_notes">All notes</string>
     <string name="instrument_def_violin">Violin</string>
     <string name="instrument_def_viola">Viola</string>

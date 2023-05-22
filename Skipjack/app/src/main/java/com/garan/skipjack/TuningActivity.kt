@@ -17,7 +17,7 @@ class TuningActivity() : ComponentActivity() {
         val config = if (configId != null) {
             TuningConfig.valueOf(configId)
         } else {
-            TuningConfig.ALL_NOTES
+            TuningConfig.WHOLE_NOTES
         }
         setContent {
             SkipjackTheme {

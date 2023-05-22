@@ -13,7 +13,7 @@ import kotlin.math.absoluteValue
 class TuningRepository @Inject constructor(
     private val audioSource: AudioSource
 ) {
-    private var tuningConfig = TuningConfig.ALL_NOTES
+    private var tuningConfig = TuningConfig.WHOLE_NOTES
 
     val tuningStatusFlow = flow<TunedStatus> {
         if (tuningConfig != TuningConfig.NONE) {

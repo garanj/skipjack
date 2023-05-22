@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.first
 
 const val RESOURCES_VERSION = "100"
 const val RECENT_INSTRUMENT_BUTTON_ID = "RECENT_INSTRUMENT_BUTTON_ID"
-const val ALL_NOTES_BUTTON_ID = "ALL_NOTES_BUTTON_ID"
+const val WHOLE_NOTES_BUTTON_ID = "WHOLE_NOTES_BUTTON_ID"
 const val MORE_BUTTON_ID = "MORE_BUTTON_ID"
 
 @OptIn(ExperimentalHorologistApi::class)
@@ -42,11 +42,11 @@ class QuickAccessTile() : SuspendingTileService() {
     private val onPrimaryColor = android.graphics.Color.parseColor("#000000")
 
     private val LAST_INSTRUMENT_ICON_ID = "last_instrument_id"
-    private val ALL_NOTES_ICON_ID = "all_notes_icon_id"
+    private val WHOLE_NOTES_ICON_ID = "whole_notes_icon_id"
 
     private val buttonIds = setOf(
         RECENT_INSTRUMENT_BUTTON_ID,
-        ALL_NOTES_BUTTON_ID,
+        WHOLE_NOTES_BUTTON_ID,
         MORE_BUTTON_ID,
     )
 
@@ -61,7 +61,7 @@ class QuickAccessTile() : SuspendingTileService() {
                     putExtra(EXTRA_TUNING_CONFIG_NAME, recentInstrument.name)
                 }
 
-                ALL_NOTES_BUTTON_ID -> Intent(this, TuningActivity::class.java)
+                WHOLE_NOTES_BUTTON_ID -> Intent(this, TuningActivity::class.java)
                 else -> Intent(this, MainActivity::class.java)
             }
             TaskStackBuilder.create(this)
@@ -87,7 +87,7 @@ class QuickAccessTile() : SuspendingTileService() {
                 drawableResToImageResource(R.drawable.baseline_music_note_24)
             )
             .addIdToImageMapping(
-                ALL_NOTES_ICON_ID,
+                WHOLE_NOTES_ICON_ID,
                 drawableResToImageResource(R.drawable.baseline_piano_24)
             )
             .build()
@@ -102,9 +102,9 @@ class QuickAccessTile() : SuspendingTileService() {
             iconId = LAST_INSTRUMENT_ICON_ID,
             clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID)
         )
-        val freeTuning = Instrument(
-            label = getString(R.string.instrument_def_all_notes),
-            iconId = ALL_NOTES_ICON_ID,
+        val wholeNotes = Instrument(
+            label = getString(R.string.instrument_def_whole_notes),
+            iconId = WHOLE_NOTES_ICON_ID,
             clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID)
         )
 
@@ -114,7 +114,7 @@ class QuickAccessTile() : SuspendingTileService() {
                     .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
                     .addContent(instrumentChip(this, deviceParameters, lastInstrument))
                     .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(4f)).build())
-                    .addContent(instrumentChip(this, deviceParameters, freeTuning))
+                    .addContent(instrumentChip(this, deviceParameters, wholeNotes))
                     .build()
             )
             .setPrimaryChipContent(

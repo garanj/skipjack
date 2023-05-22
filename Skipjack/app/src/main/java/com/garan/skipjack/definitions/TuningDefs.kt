@@ -13,8 +13,8 @@ enum class TuningConfig {
         override val notes = listOf<TuningTarget>()
         override val isInstrument = false
     },
-    ALL_NOTES {
-        override val labelResId = R.string.instrument_def_all_notes
+    WHOLE_NOTES {
+        override val labelResId = R.string.instrument_def_whole_notes
         override val notes = listOf(
             NamedNote(Note.A),
             NamedNote(Note.B),
@@ -23,6 +23,24 @@ enum class TuningConfig {
             NamedNote(Note.E),
             NamedNote(Note.F),
             NamedNote(Note.G)
+        )
+        override val isInstrument = false
+    },
+    ALL_NOTES {
+        override val labelResId = R.string.instrument_def_all_notes
+        override val notes = listOf(
+            NamedNote(Note.A),
+            NamedNote(Note.A_SHARP),
+            NamedNote(Note.B),
+            NamedNote(Note.C),
+            NamedNote(Note.C_SHARP),
+            NamedNote(Note.D),
+            NamedNote(Note.D_SHARP),
+            NamedNote(Note.E),
+            NamedNote(Note.F),
+            NamedNote(Note.F_SHARP),
+            NamedNote(Note.G),
+            NamedNote(Note.G_SHARP),
         )
         override val isInstrument = false
     },
