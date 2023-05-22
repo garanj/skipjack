@@ -23,7 +23,7 @@ class Settings @Inject constructor(
     }
 
     suspend fun setMostRecentInstrument(config: TuningConfig) {
-        if (config != TuningConfig.ALL_NOTES) {
+        if (config != TuningConfig.WHOLE_NOTES) {
             context.dataStore.edit { prefs ->
                 prefs[recentInstrumentId] = config.name
             }

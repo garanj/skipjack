@@ -13,8 +13,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import com.garan.skipjack.model.Note
@@ -95,8 +100,20 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        val superscript = SpanStyle(
+            baselineShift = BaselineShift(0.3f),
+            fontSize = 24.sp
+        )
+        val label = buildAnnotatedString {
+            append(info.note.name.first())
+            if (info.note.isSharp) {
+                withStyle(superscript) {
+                    append("♯")
+                }
+            }
+        }
         Text(
-            text = info.note.name,
+            text = label,
             style = MaterialTheme.typography.display1,
             color = info.note.color
         )
@@ -112,7 +129,7 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
 @Composable
 fun PitchMeterPreview() {
     val info = TunedStatus.TuningInfo(
-        note = Note.A,
+        note = Note.A_SHARP,
         pitchDifference = 0.5
     )
     SkipjackTheme {

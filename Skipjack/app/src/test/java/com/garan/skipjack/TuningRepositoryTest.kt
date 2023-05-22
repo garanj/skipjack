@@ -18,7 +18,7 @@ class TuningRepositoryTest {
                 listOf(440f)
             )
         )
-        repo.setTuningConfig(TuningConfig.ALL_NOTES)
+        repo.setTuningConfig(TuningConfig.WHOLE_NOTES)
 
         repo.tuningStatusFlow.test {
             val firstItem = awaitItem()

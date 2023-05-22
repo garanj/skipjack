@@ -22,7 +22,7 @@ class StartMenuViewModel @Inject constructor(
     ViewModel() {
 
     val mostRecentConfig = settings.mostRecentInstrument
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TuningConfig.ALL_NOTES)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TuningConfig.WHOLE_NOTES)
 
     fun setMostRecentConfig(config: TuningConfig) {
         viewModelScope.launch {
