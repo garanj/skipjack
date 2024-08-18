@@ -17,11 +17,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.model.Note
 import com.garan.skipjack.model.TunedStatus
 import com.garan.skipjack.theme.SkipjackTheme
@@ -120,12 +119,7 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
     }
 }
 
-@Preview(
-    device = Devices.WEAR_OS_LARGE_ROUND,
-    showSystemUi = true,
-    backgroundColor = 0xff000000,
-    showBackground = true
-)
+@WearPreviewDevices
 @Composable
 fun PitchMeterPreview() {
     val info = TunedStatus.TuningInfo(

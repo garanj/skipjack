@@ -3,21 +3,21 @@ package com.garan.skipjack.tile
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import androidx.wear.tiles.ActionBuilders
-import androidx.wear.tiles.ColorBuilders
-import androidx.wear.tiles.DeviceParametersBuilders
-import androidx.wear.tiles.DimensionBuilders
-import androidx.wear.tiles.DimensionBuilders.dp
-import androidx.wear.tiles.LayoutElementBuilders
-import androidx.wear.tiles.ModifiersBuilders
+import androidx.wear.protolayout.ActionBuilders
+import androidx.wear.protolayout.ColorBuilders
+import androidx.wear.protolayout.DeviceParametersBuilders
+import androidx.wear.protolayout.DimensionBuilders
+import androidx.wear.protolayout.DimensionBuilders.dp
+import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.ModifiersBuilders
+import androidx.wear.protolayout.ResourceBuilders
+import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.material.Chip
+import androidx.wear.protolayout.material.ChipColors
+import androidx.wear.protolayout.material.CompactChip
+import androidx.wear.protolayout.material.layouts.PrimaryLayout
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.ResourceBuilders
 import androidx.wear.tiles.TileBuilders
-import androidx.wear.tiles.TimelineBuilders
-import androidx.wear.tiles.material.Chip
-import androidx.wear.tiles.material.ChipColors
-import androidx.wear.tiles.material.CompactChip
-import androidx.wear.tiles.material.layouts.PrimaryLayout
 import com.garan.skipjack.EXTRA_TUNING_CONFIG_NAME
 import com.garan.skipjack.MainActivity
 import com.garan.skipjack.R
@@ -26,6 +26,7 @@ import com.garan.skipjack.datastore.Settings
 import com.garan.skipjack.definitions.TuningConfig
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.tiles.SuspendingTileService
+
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 import kotlinx.coroutines.flow.first
 
@@ -55,8 +56,8 @@ class QuickAccessTile() : SuspendingTileService() {
 
         // This is a workaround to build a backstack containing the parent activity when launching
         // a Tile.
-        if (requestParams.state?.lastClickableId in buttonIds) {
-            val intent = when (requestParams.state?.lastClickableId) {
+        if (requestParams.currentState.lastClickableId in buttonIds) {
+            val intent = when (requestParams.currentState.lastClickableId) {
                 RECENT_INSTRUMENT_BUTTON_ID -> Intent(this, TuningActivity::class.java).apply {
                     putExtra(EXTRA_TUNING_CONFIG_NAME, recentInstrument.name)
                 }
@@ -71,9 +72,9 @@ class QuickAccessTile() : SuspendingTileService() {
 
         return TileBuilders.Tile.Builder()
             .setResourcesVersion(RESOURCES_VERSION)
-            .setTimeline(
+            .setTileTimeline(
                 TimelineBuilders.Timeline.fromLayoutElement(
-                    buildLayout(requestParams.deviceParameters!!, recentInstrument)
+                    buildLayout(requestParams.deviceConfiguration, recentInstrument)
                 )
             )
             .build()
@@ -109,6 +110,7 @@ class QuickAccessTile() : SuspendingTileService() {
         )
 
         return PrimaryLayout.Builder(deviceParameters)
+            .setResponsiveContentInsetEnabled(true)
             .setContent(
                 LayoutElementBuilders.Column.Builder()
                     .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
