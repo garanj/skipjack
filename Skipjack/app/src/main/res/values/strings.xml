@@ -7,6 +7,7 @@
     </string>
     <string name="show_permissions">Launch</string>
 
+    <string name="instruments">Instruments</string>
     <string name="instrument_def_none">None</string>
     <string name="instrument_def_whole_notes">Whole notes</string>
     <string name="instrument_def_all_notes">All notes</string>

@@ -12,13 +12,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import com.garan.skipjack.MainActivity
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.NO_TUNED_NOTE_AUTO_EXIT_TIMEOUT_MS
 import com.garan.skipjack.R
+import com.garan.skipjack.TuningActivity
 import com.garan.skipjack.theme.SkipjackTheme
 import kotlinx.coroutines.delay
 import kotlin.math.PI
@@ -31,7 +30,7 @@ fun PlaceholderPitchMeter() {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         delay(NO_TUNED_NOTE_AUTO_EXIT_TIMEOUT_MS)
-        (context as MainActivity).finish()
+        (context as TuningActivity).finish()
     }
     Canvas(modifier = Modifier.fillMaxSize()) {
         val brush = Brush.sweepGradient(
@@ -79,12 +78,7 @@ fun PlaceholderPitchMeter() {
     }
 }
 
-@Preview(
-    device = Devices.WEAR_OS_LARGE_ROUND,
-    showSystemUi = true,
-    backgroundColor = 0xff000000,
-    showBackground = true
-)
+@WearPreviewDevices
 @Composable
 fun PlaceholderPitchMeterPreview() {
     SkipjackTheme {

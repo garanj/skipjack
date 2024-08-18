@@ -6,8 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.TUNING_NOTE_TIMEOUT_MS
 import com.garan.skipjack.components.PitchMeter
 import com.garan.skipjack.components.PlaceholderPitchMeter
@@ -33,12 +32,7 @@ fun PitchMeterScreen(
     }
 }
 
-@Preview(
-    device = Devices.WEAR_OS_LARGE_ROUND,
-    showSystemUi = true,
-    backgroundColor = 0xff000000,
-    showBackground = true
-)
+@WearPreviewDevices
 @Composable
 fun PitchMeterScreenPreview() {
     val info = TunedStatus.TuningInfo(

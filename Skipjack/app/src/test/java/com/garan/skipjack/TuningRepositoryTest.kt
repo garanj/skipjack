@@ -10,7 +10,6 @@ import org.junit.Assert
 import org.junit.Test
 
 class TuningRepositoryTest {
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun namedNoteA_ExactlyTuned() = runTest {
         val repo = TuningRepository(
@@ -30,7 +29,6 @@ class TuningRepositoryTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun exactNoteA_OutOneOctave() = runTest {
         val repo = TuningRepository(
