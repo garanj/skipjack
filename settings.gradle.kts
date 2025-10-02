@@ -31,10 +31,10 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             name = "TarsosDSP repository"
-            url = "https://mvn.0110.be/releases"
+            url = uri("https://mvn.0110.be/releases")
         }
     }
 }
 
 rootProject.name = "SkipJack"
-include ":app"
+include(":app")

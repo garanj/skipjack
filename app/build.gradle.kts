@@ -1,0 +1,100 @@
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.compose.compiler)
+    kotlin("kapt")
+}
+
+android {
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.garan.skipjack"
+        minSdk = 30
+        targetSdk = 34
+        versionCode = 7
+        versionName = "1.4.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    namespace = "com.garan.skipjack"
+}
+
+dependencies {
+    implementation(libs.androidx.wear)
+
+    // General compose dependencies
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.wear.compose.material)
+    implementation(libs.wear.compose.foundation)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.compose.material.icons.extended)
+
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.wear.compose.ui.tooling)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
+
+    // Permissions
+    implementation(libs.accompanist.permissions)
+
+    // Audio DSP library
+    implementation(libs.tarsos.dsp.core)
+    implementation(libs.tarsos.dsp.jvm)
+
+    // Horologist
+    implementation(libs.horologist.compose.layout)
+    implementation(libs.horologist.compose.material)
+
+    // Tiles
+    implementation(libs.androidx.tiles.material)
+    implementation(libs.androidx.tiles)
+    implementation(libs.horologist.tiles)
+
+    // Datastore
+    implementation(libs.androidx.datastore)
+
+    implementation(libs.androidx.core.splashscreen)
+
+    // Tests
+    testImplementation(libs.junit)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
+}
