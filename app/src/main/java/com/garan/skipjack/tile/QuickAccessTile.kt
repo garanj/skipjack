@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.garan.skipjack.tile
 
 import android.app.TaskStackBuilder
@@ -36,7 +51,7 @@ const val WHOLE_NOTES_BUTTON_ID = "WHOLE_NOTES_BUTTON_ID"
 const val MORE_BUTTON_ID = "MORE_BUTTON_ID"
 
 @OptIn(ExperimentalHorologistApi::class)
-class QuickAccessTile() : SuspendingTileService() {
+class QuickAccessTile : SuspendingTileService() {
     private val settings by lazy { Settings(this) }
 
     private val primaryColor = "#F6D70B".toColorInt()
@@ -80,19 +95,17 @@ class QuickAccessTile() : SuspendingTileService() {
             .build()
     }
 
-    override suspend fun resourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ResourceBuilders.Resources {
-        return ResourceBuilders.Resources.Builder()
-            .setVersion(RESOURCES_VERSION)
-            .addIdToImageMapping(
-                lastInstrumentIconId,
-                drawableResToImageResource(R.drawable.baseline_music_note_24),
-            )
-            .addIdToImageMapping(
-                wholeNotesIconId,
-                drawableResToImageResource(R.drawable.baseline_piano_24),
-            )
-            .build()
-    }
+    override suspend fun resourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ResourceBuilders.Resources = ResourceBuilders.Resources.Builder()
+        .setVersion(RESOURCES_VERSION)
+        .addIdToImageMapping(
+            lastInstrumentIconId,
+            drawableResToImageResource(R.drawable.baseline_music_note_24),
+        )
+        .addIdToImageMapping(
+            wholeNotesIconId,
+            drawableResToImageResource(R.drawable.baseline_piano_24),
+        )
+        .build()
 
     private fun buildLayout(
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
@@ -150,21 +163,19 @@ class QuickAccessTile() : SuspendingTileService() {
         context: Context,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
         instrument: Instrument,
-    ): Chip {
-        return Chip.Builder(context, instrument.clickable, deviceParameters)
-            .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-            .setIconContent(instrument.iconId)
-            .setPrimaryLabelContent(instrument.label)
-            .setChipColors(
-                ChipColors(
-                    /*backgroundColor=*/
-                    ColorBuilders.argb(primaryColor),
-                    /*contentColor=*/
-                    ColorBuilders.argb(onPrimaryColor),
-                ),
-            )
-            .build()
-    }
+    ): Chip = Chip.Builder(context, instrument.clickable, deviceParameters)
+        .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
+        .setIconContent(instrument.iconId)
+        .setPrimaryLabelContent(instrument.label)
+        .setChipColors(
+            ChipColors(
+                /*backgroundColor=*/
+                ColorBuilders.argb(primaryColor),
+                /*contentColor=*/
+                ColorBuilders.argb(onPrimaryColor),
+            ),
+        )
+        .build()
 
     data class Instrument(
         val label: String,
