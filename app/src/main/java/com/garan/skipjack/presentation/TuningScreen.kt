@@ -31,10 +31,11 @@ import com.google.accompanist.permissions.rememberPermissionState
 fun TuningScreen(
     config: TuningConfig,
 ) {
+    val viewModel = hiltViewModel<PitchMeterViewModel>()
     val permissionState = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
 
     if (permissionState.status == PermissionStatus.Granted) {
-        val viewModel = hiltViewModel<PitchMeterViewModel>()
+
         val tunedStatus by viewModel.tuningStatusFlow.collectAsState()
         PitchMeterScreen(status = tunedStatus)
         LaunchedEffect(Unit) {
