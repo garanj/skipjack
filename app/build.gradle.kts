@@ -1,9 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
-    kotlin("kapt")
 }
 
 android {
@@ -66,10 +66,9 @@ dependencies {
     implementation(libs.wear.compose.ui.tooling)
 
     // Hilt
-    implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     // Permissions
     implementation(libs.accompanist.permissions)
