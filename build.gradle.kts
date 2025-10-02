@@ -13,10 +13,14 @@ subprojects {
     extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
             target("**/*.kt")
-            targetExclude("$buildDir/**/*.kt")
-            targetExclude("bin/**/*.kt")
-
-            ktlint(libs.versions.ktlint.get())
+            targetExclude("**/build/**/*.kt")
+            ktlint(libs.versions.ktlint.get()).editorConfigOverride(
+                mapOf(
+                    "android" to "true",
+                    "ktlint_standard_property-naming" to "disabled",
+                    "ktlint_function_naming_ignore_when_annotated_with" to "Composable"
+                ),
+            )
             licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
         }
     }
