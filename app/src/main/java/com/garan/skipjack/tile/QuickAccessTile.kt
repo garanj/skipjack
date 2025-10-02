@@ -3,6 +3,7 @@ package com.garan.skipjack.tile
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import androidx.core.graphics.toColorInt
 import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DeviceParametersBuilders
@@ -38,8 +39,8 @@ const val MORE_BUTTON_ID = "MORE_BUTTON_ID"
 class QuickAccessTile() : SuspendingTileService() {
     private val settings by lazy { Settings(this) }
 
-    private val primaryColor = android.graphics.Color.parseColor("#F6D70B")
-    private val onPrimaryColor = android.graphics.Color.parseColor("#000000")
+    private val primaryColor = "#F6D70B".toColorInt()
+    private val onPrimaryColor = "#000000".toColorInt()
 
     private val lastInstrumentIconId = "last_instrument_id"
     private val wholeNotesIconId = "whole_notes_icon_id"
@@ -105,7 +106,7 @@ class QuickAccessTile() : SuspendingTileService() {
         val wholeNotes = Instrument(
             label = getString(R.string.instrument_def_whole_notes),
             iconId = wholeNotesIconId,
-            clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID),
+            clickable = createClickable(WHOLE_NOTES_BUTTON_ID),
         )
 
         return PrimaryLayout.Builder(deviceParameters)
