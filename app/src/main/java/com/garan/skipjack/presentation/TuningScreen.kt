@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.garan.skipjack.definitions.TuningConfig
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
@@ -31,10 +31,11 @@ import com.google.accompanist.permissions.rememberPermissionState
 fun TuningScreen(
     config: TuningConfig,
 ) {
+    val viewModel = hiltViewModel<PitchMeterViewModel>()
     val permissionState = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
 
     if (permissionState.status == PermissionStatus.Granted) {
-        val viewModel = hiltViewModel<PitchMeterViewModel>()
+
         val tunedStatus by viewModel.tuningStatusFlow.collectAsState()
         PitchMeterScreen(status = tunedStatus)
         LaunchedEffect(Unit) {
