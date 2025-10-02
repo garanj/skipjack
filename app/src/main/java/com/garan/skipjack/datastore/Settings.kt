@@ -15,7 +15,7 @@ import javax.inject.Inject
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class Settings @Inject constructor(
-    @ApplicationContext val context: Context
+    @ApplicationContext val context: Context,
 ) {
     val mostRecentInstrument: Flow<TuningConfig> = context.dataStore.data.map { prefs ->
         val configId = prefs[recentInstrumentId] ?: TuningConfig.VIOLIN.name

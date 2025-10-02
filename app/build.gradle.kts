@@ -20,7 +20,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            isShrinkResources = false
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -54,7 +54,7 @@ dependencies {
 
     // General compose dependencies
     implementation(libs.androidx.activity.compose)
-    implementation(libs.wear.compose.material)
+    implementation(libs.wear.compose.material3)
     implementation(libs.wear.compose.foundation)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

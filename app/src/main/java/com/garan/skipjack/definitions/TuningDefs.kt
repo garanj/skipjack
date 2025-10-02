@@ -6,7 +6,6 @@ import com.garan.skipjack.model.NamedNote
 import com.garan.skipjack.model.Note
 import com.garan.skipjack.model.TuningTarget
 
-
 enum class TuningConfig {
     NONE {
         override val labelResId = R.string.instrument_def_none
@@ -22,7 +21,7 @@ enum class TuningConfig {
             NamedNote(Note.D),
             NamedNote(Note.E),
             NamedNote(Note.F),
-            NamedNote(Note.G)
+            NamedNote(Note.G),
         )
         override val isInstrument = false
     },
@@ -109,10 +108,9 @@ enum class TuningConfig {
             ExactNote(Note.B, 3),
             ExactNote(Note.D, 4),
         )
-    };
+    }, ;
 
     abstract val labelResId: Int
     open val isInstrument: Boolean = true
     abstract val notes: List<TuningTarget>
 }
-

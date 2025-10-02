@@ -10,43 +10,43 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.R
 import com.garan.skipjack.theme.SkipjackTheme
 
 @Composable
 fun PermissionRequiredScreen(
-    onPermissionClick: () -> Unit
+    onPermissionClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(0.707f)
+            modifier = Modifier.fillMaxSize(0.707f),
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceAround,
             ) {
                 Text(
                     text = stringResource(
                         id = R.string.permissions_explanation,
-                        stringResource(id = R.string.app_name)
+                        stringResource(id = R.string.app_name),
                     ),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.caption1
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = onPermissionClick
+                    onClick = onPermissionClick,
                 ) {
                     Text(
-                        text = stringResource(R.string.show_permissions)
+                        text = stringResource(R.string.show_permissions),
                     )
                 }
             }

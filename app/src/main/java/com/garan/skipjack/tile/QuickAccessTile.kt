@@ -26,7 +26,6 @@ import com.garan.skipjack.datastore.Settings
 import com.garan.skipjack.definitions.TuningConfig
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.tiles.SuspendingTileService
-
 import com.google.android.horologist.tiles.images.drawableResToImageResource
 import kotlinx.coroutines.flow.first
 
@@ -42,8 +41,8 @@ class QuickAccessTile() : SuspendingTileService() {
     private val primaryColor = android.graphics.Color.parseColor("#F6D70B")
     private val onPrimaryColor = android.graphics.Color.parseColor("#000000")
 
-    private val LAST_INSTRUMENT_ICON_ID = "last_instrument_id"
-    private val WHOLE_NOTES_ICON_ID = "whole_notes_icon_id"
+    private val lastInstrumentIconId = "last_instrument_id"
+    private val wholeNotesIconId = "whole_notes_icon_id"
 
     private val buttonIds = setOf(
         RECENT_INSTRUMENT_BUTTON_ID,
@@ -74,8 +73,8 @@ class QuickAccessTile() : SuspendingTileService() {
             .setResourcesVersion(RESOURCES_VERSION)
             .setTileTimeline(
                 TimelineBuilders.Timeline.fromLayoutElement(
-                    buildLayout(requestParams.deviceConfiguration, recentInstrument)
-                )
+                    buildLayout(requestParams.deviceConfiguration, recentInstrument),
+                ),
             )
             .build()
     }
@@ -84,29 +83,29 @@ class QuickAccessTile() : SuspendingTileService() {
         return ResourceBuilders.Resources.Builder()
             .setVersion(RESOURCES_VERSION)
             .addIdToImageMapping(
-                LAST_INSTRUMENT_ICON_ID,
-                drawableResToImageResource(R.drawable.baseline_music_note_24)
+                lastInstrumentIconId,
+                drawableResToImageResource(R.drawable.baseline_music_note_24),
             )
             .addIdToImageMapping(
-                WHOLE_NOTES_ICON_ID,
-                drawableResToImageResource(R.drawable.baseline_piano_24)
+                wholeNotesIconId,
+                drawableResToImageResource(R.drawable.baseline_piano_24),
             )
             .build()
     }
 
     private fun buildLayout(
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
-        recentInstrument: TuningConfig
+        recentInstrument: TuningConfig,
     ): PrimaryLayout {
         val lastInstrument = Instrument(
             label = getString(recentInstrument.labelResId),
-            iconId = LAST_INSTRUMENT_ICON_ID,
-            clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID)
+            iconId = lastInstrumentIconId,
+            clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID),
         )
         val wholeNotes = Instrument(
             label = getString(R.string.instrument_def_whole_notes),
-            iconId = WHOLE_NOTES_ICON_ID,
-            clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID)
+            iconId = wholeNotesIconId,
+            clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID),
         )
 
         return PrimaryLayout.Builder(deviceParameters)
@@ -117,22 +116,24 @@ class QuickAccessTile() : SuspendingTileService() {
                     .addContent(instrumentChip(this, deviceParameters, lastInstrument))
                     .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(4f)).build())
                     .addContent(instrumentChip(this, deviceParameters, wholeNotes))
-                    .build()
+                    .build(),
             )
             .setPrimaryChipContent(
                 CompactChip.Builder(
                     this,
                     getString(R.string.tile_more_button),
                     createClickable(MORE_BUTTON_ID),
-                    deviceParameters
+                    deviceParameters,
                 )
                     .setChipColors(
                         ChipColors(
-                            /*backgroundColor=*/ ColorBuilders.argb(primaryColor),
-                            /*contentColor=*/ ColorBuilders.argb(onPrimaryColor)
-                        )
+                            /*backgroundColor=*/
+                            ColorBuilders.argb(primaryColor),
+                            /*contentColor=*/
+                            ColorBuilders.argb(onPrimaryColor),
+                        ),
                     )
-                    .build()
+                    .build(),
             )
             .build()
     }
@@ -140,14 +141,14 @@ class QuickAccessTile() : SuspendingTileService() {
     private fun createClickable(actionId: String) = ModifiersBuilders.Clickable.Builder()
         .setId(actionId)
         .setOnClick(
-            ActionBuilders.LoadAction.Builder().build()
+            ActionBuilders.LoadAction.Builder().build(),
         )
         .build()
 
     private fun instrumentChip(
         context: Context,
         deviceParameters: DeviceParametersBuilders.DeviceParameters,
-        instrument: Instrument
+        instrument: Instrument,
     ): Chip {
         return Chip.Builder(context, instrument.clickable, deviceParameters)
             .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
@@ -155,9 +156,11 @@ class QuickAccessTile() : SuspendingTileService() {
             .setPrimaryLabelContent(instrument.label)
             .setChipColors(
                 ChipColors(
-                    /*backgroundColor=*/ ColorBuilders.argb(primaryColor),
-                    /*contentColor=*/ ColorBuilders.argb(onPrimaryColor)
-                )
+                    /*backgroundColor=*/
+                    ColorBuilders.argb(primaryColor),
+                    /*contentColor=*/
+                    ColorBuilders.argb(onPrimaryColor),
+                ),
             )
             .build()
     }
@@ -165,6 +168,6 @@ class QuickAccessTile() : SuspendingTileService() {
     data class Instrument(
         val label: String,
         val iconId: String,
-        val clickable: ModifiersBuilders.Clickable
+        val clickable: ModifiersBuilders.Clickable,
     )
 }

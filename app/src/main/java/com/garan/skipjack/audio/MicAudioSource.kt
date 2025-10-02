@@ -18,33 +18,33 @@ import kotlinx.coroutines.launch
  * Provides pitch detection from the built in microphone.
  */
 class MicAudioSource(private val context: Context) : AudioSource {
-    private val SAMPLE_SIZE = 4096
-    private val SAMPLING_RATE_IN_HZ = 44100
-    private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
-    private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
+    private val sampleSize = 4096
+    private val samplingRateInHz = 44100
+    private val channelConfig = AudioFormat.CHANNEL_IN_MONO
+    private val audioFormat = AudioFormat.ENCODING_PCM_16BIT
 
     private val bufferSize =
-        AudioRecord.getMinBufferSize(SAMPLING_RATE_IN_HZ, CHANNEL_CONFIG, AUDIO_FORMAT) * 2
-    private val sampleBuffer = FloatArray(SAMPLE_SIZE)
+        AudioRecord.getMinBufferSize(samplingRateInHz, channelConfig, audioFormat) * 2
+    private val sampleBuffer = FloatArray(sampleSize)
     private val readBuffer = ShortArray(512)
 
-    private val yin = FastYin(SAMPLING_RATE_IN_HZ.toFloat(), SAMPLE_SIZE)
+    private val yin = FastYin(samplingRateInHz.toFloat(), sampleSize)
 
     @SuppressLint("MissingPermission")
     override val pitchFlow = channelFlow<PitchDetectionResult> {
         if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.RECORD_AUDIO
+                Manifest.permission.RECORD_AUDIO,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             throw IllegalStateException("Permission!")
         }
         val audioRecord = AudioRecord(
             MediaRecorder.AudioSource.MIC,
-            SAMPLING_RATE_IN_HZ,
+            samplingRateInHz,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
-            bufferSize
+            bufferSize,
         )
 
         audioRecord.startRecording()

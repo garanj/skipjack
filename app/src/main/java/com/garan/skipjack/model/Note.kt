@@ -55,7 +55,7 @@ enum class Note {
         override val scaleOffset = -1
         override val color = Color(0xff, 0x00, 0xaa)
         override val isSharp = true
-    };
+    }, ;
 
     abstract val scaleOffset: Int
     abstract val color: Color

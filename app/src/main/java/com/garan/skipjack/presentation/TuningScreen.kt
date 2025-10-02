@@ -14,9 +14,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun TuningScreen(
-    config: TuningConfig
+    config: TuningConfig,
 ) {
-
     val permissionState = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
 
     if (permissionState.status == PermissionStatus.Granted) {
@@ -28,7 +27,7 @@ fun TuningScreen(
         }
     } else {
         PermissionRequiredScreen(
-            onPermissionClick = { permissionState.launchPermissionRequest() }
+            onPermissionClick = { permissionState.launchPermissionRequest() },
         )
     }
 }

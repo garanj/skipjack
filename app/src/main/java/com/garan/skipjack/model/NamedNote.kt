@@ -19,6 +19,4 @@ data class NamedNote(val note: Note) : TuningTarget {
         }
         return modVal
     }
-
 }
-

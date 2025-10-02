@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.NO_TUNED_NOTE_AUTO_EXIT_TIMEOUT_MS
 import com.garan.skipjack.R
@@ -23,7 +23,6 @@ import kotlinx.coroutines.delay
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
-
 
 @Composable
 fun PlaceholderPitchMeter() {
@@ -37,7 +36,7 @@ fun PlaceholderPitchMeter() {
             0.5f to Color.Black,
             0.7f to Color.Gray,
             0.8f to Color.Gray,
-            1f to Color.Black
+            1f to Color.Black,
         )
         for (i in 15..45) {
             val minuteAngle = i * PI / 30
@@ -56,24 +55,24 @@ fun PlaceholderPitchMeter() {
                 brush = brush,
                 start = Offset(
                     startX.toFloat(),
-                    startY.toFloat()
+                    startY.toFloat(),
                 ),
                 end = Offset(
                     endX.toFloat(),
-                    endY.toFloat()
+                    endY.toFloat(),
                 ),
-                strokeWidth = 5f
+                strokeWidth = 5f,
             )
         }
     }
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = stringResource(R.string.waiting),
-            style = MaterialTheme.typography.body1,
-            color = Color.Gray
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
         )
     }
 }

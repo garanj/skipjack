@@ -9,9 +9,8 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-
 class TuningRepository @Inject constructor(
-    private val audioSource: AudioSource
+    private val audioSource: AudioSource,
 ) {
     private var tuningConfig = TuningConfig.WHOLE_NOTES
 

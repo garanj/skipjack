@@ -18,8 +18,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.model.Note
 import com.garan.skipjack.model.TunedStatus
@@ -29,14 +29,15 @@ import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.sin
 
-const val tunedBoundary = PI / 32
-const val pointerWidth = 20f
+const val TUNED_BOUNDARY = PI / 32
+const val POINTER_WIDTH = 20f
 
 @Composable
 fun PitchMeter(info: TunedStatus.TuningInfo) {
     val animatePitch by animateFloatAsState(
         targetValue = info.pitchDifference.toFloat().coerceIn(-2.0f, 2.0f),
-        animationSpec = tween(durationMillis = 200), label = ""
+        animationSpec = tween(durationMillis = 200),
+        label = "",
     )
 
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -44,7 +45,7 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
             0.5f to Color.Black,
             0.7f to info.note.color,
             0.8f to info.note.color,
-            1f to Color.Black
+            1f to Color.Black,
         )
         for (i in 15..45) {
             val minuteAngle = i * PI / 30
@@ -63,45 +64,45 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
                 brush = brush,
                 start = Offset(
                     startX.toFloat(),
-                    startY.toFloat()
+                    startY.toFloat(),
                 ),
                 end = Offset(
                     endX.toFloat(),
-                    endY.toFloat()
+                    endY.toFloat(),
                 ),
-                strokeWidth = 5f
+                strokeWidth = 5f,
             )
         }
         val angle = animatePitch * PI / 3
         val drawAngle = angle - PI / 2
         val startX = this.center.x + 50 * cos(drawAngle)
         val startY = this.center.y + 50 * sin(drawAngle)
-        val xEnd = center.x + cos(drawAngle) * (center.x - pointerWidth)
-        val yEnd = center.y + sin(drawAngle) * (center.y - pointerWidth)
+        val xEnd = center.x + cos(drawAngle) * (center.x - POINTER_WIDTH)
+        val yEnd = center.y + sin(drawAngle) * (center.y - POINTER_WIDTH)
         drawLine(
             color = info.note.color,
             start = Offset(startX.toFloat(), startY.toFloat()),
             end = Offset(xEnd.toFloat(), yEnd.toFloat()),
-            strokeWidth = pointerWidth,
-            cap = StrokeCap.Round
+            strokeWidth = POINTER_WIDTH,
+            cap = StrokeCap.Round,
         )
-        if (angle.absoluteValue > tunedBoundary) {
+        if (angle.absoluteValue > TUNED_BOUNDARY) {
             drawLine(
                 color = Color.Black,
                 start = Offset(startX.toFloat(), startY.toFloat()),
                 end = Offset(xEnd.toFloat(), yEnd.toFloat()),
-                strokeWidth = pointerWidth - 6,
-                cap = StrokeCap.Round
+                strokeWidth = POINTER_WIDTH - 6,
+                cap = StrokeCap.Round,
             )
         }
     }
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         val superscript = SpanStyle(
             baselineShift = BaselineShift(0.3f),
-            fontSize = 24.sp
+            fontSize = 24.sp,
         )
         val label = buildAnnotatedString {
             append(info.note.name.first())
@@ -113,8 +114,8 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
         }
         Text(
             text = label,
-            style = MaterialTheme.typography.display1,
-            color = info.note.color
+            style = MaterialTheme.typography.displayLarge,
+            color = info.note.color,
         )
     }
 }
@@ -124,7 +125,7 @@ fun PitchMeter(info: TunedStatus.TuningInfo) {
 fun PitchMeterPreview() {
     val info = TunedStatus.TuningInfo(
         note = Note.A_SHARP,
-        pitchDifference = 0.5
+        pitchDifference = 0.5,
     )
     SkipjackTheme {
         PitchMeter(info)

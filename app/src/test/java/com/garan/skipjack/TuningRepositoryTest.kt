@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.garan.skipjack.definitions.TuningConfig
 import com.garan.skipjack.model.Note
 import com.garan.skipjack.model.TunedStatus
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
@@ -14,8 +13,8 @@ class TuningRepositoryTest {
     fun namedNoteA_ExactlyTuned() = runTest {
         val repo = TuningRepository(
             FakeAudioSource(
-                listOf(440f)
-            )
+                listOf(440f),
+            ),
         )
         repo.setTuningConfig(TuningConfig.WHOLE_NOTES)
 
@@ -34,8 +33,8 @@ class TuningRepositoryTest {
         val repo = TuningRepository(
             FakeAudioSource(
                 // G2
-                listOf(98f)
-            )
+                listOf(98f),
+            ),
         )
         // Set the TuningRepo to include only one Tuning target: A4
         repo.setTuningConfig(TuningConfig.VIOLIN)

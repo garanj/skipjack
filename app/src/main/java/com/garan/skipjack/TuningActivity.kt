@@ -36,6 +36,7 @@ class TuningActivity() : ComponentActivity() {
         setScreenOff()
     }
 
+    // TODO: Move to compose modifier
     private fun setScreenOn() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }

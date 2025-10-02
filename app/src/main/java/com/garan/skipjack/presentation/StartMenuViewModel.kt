@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StartMenuViewModel @Inject constructor(
     @ApplicationContext val context: Context,
-    private val settings: Settings
+    private val settings: Settings,
 ) :
     ViewModel() {
 

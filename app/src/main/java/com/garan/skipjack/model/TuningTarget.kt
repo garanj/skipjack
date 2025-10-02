@@ -9,8 +9,3 @@ interface TuningTarget {
 
     fun nearestPitchDifference(pitch: Float): Double
 }
-
-
-
-
-

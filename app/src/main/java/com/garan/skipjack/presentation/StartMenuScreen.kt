@@ -6,58 +6,74 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ButtonDefaults
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.R
 import com.garan.skipjack.definitions.TuningConfig
 import com.garan.skipjack.theme.SkipjackTheme
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.material.ListHeaderDefaults.firstItemPadding
-import com.google.android.horologist.compose.material.ResponsiveListHeader
+import com.google.android.horologist.compose.layout.ColumnItemType
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
-@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun StartMenuScreen(
-    onTuningClick: (TuningConfig) -> Unit
+    onTuningClick: (TuningConfig) -> Unit,
 ) {
     val context = LocalContext.current
     val instrumentMap = remember {
         TuningConfig.entries.associateBy { context.getString(it.labelResId) }.toSortedMap()
     }
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = ScalingLazyColumnDefaults.padding(
-            first = ScalingLazyColumnDefaults.ItemType.Text,
-            last = ScalingLazyColumnDefaults.ItemType.SingleButton
-        )
-    )
+    val listState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
 
-    ScreenScaffold(scrollState = columnState) {
-        ScalingLazyColumn(
-            columnState = columnState
+    ScreenScaffold(
+        scrollState = listState,
+        // Use workaround from Horologist for padding or wait until fix lands
+        contentPadding =
+        rememberResponsiveColumnPadding(
+            first = ColumnItemType.ListHeader,
+            last = ColumnItemType.IconButton,
+        ),
+    ) { contentPadding ->
+        TransformingLazyColumn(
+            state = listState,
+            contentPadding = contentPadding,
         ) {
             item {
-                ResponsiveListHeader(contentPadding = firstItemPadding()) {
-                    Text(text = stringResource(R.string.instruments))
-                }
+                ListHeader(
+                    modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
+                ) { Text(text = stringResource(R.string.instruments)) }
             }
             item {
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onTuningClick(TuningConfig.WHOLE_NOTES) }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    onClick = { onTuningClick(TuningConfig.WHOLE_NOTES) },
                 ) {
                     Text(stringResource(id = R.string.instrument_def_whole_notes))
                 }
             }
             item {
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onTuningClick(TuningConfig.ALL_NOTES) }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    onClick = { onTuningClick(TuningConfig.ALL_NOTES) },
                 ) {
                     Text(stringResource(id = R.string.instrument_def_all_notes))
                 }
@@ -67,11 +83,14 @@ fun StartMenuScreen(
                 .forEach { instrument ->
                     item {
                         Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.secondaryButtonColors(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .transformedHeight(this, transformationSpec),
+                            transformation = SurfaceTransformation(transformationSpec),
+                            colors = ButtonDefaults.filledTonalButtonColors(),
                             onClick = {
                                 onTuningClick(instrument.value)
-                            }
+                            },
                         ) {
                             Text(text = instrument.key)
                         }

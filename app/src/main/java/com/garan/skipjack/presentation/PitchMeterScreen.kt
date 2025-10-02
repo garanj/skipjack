@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PitchMeterScreen(
-    status: TunedStatus
+    status: TunedStatus,
 ) {
     var timedout by remember { mutableStateOf(false) }
     LaunchedEffect(status) {
@@ -37,7 +37,7 @@ fun PitchMeterScreen(
 fun PitchMeterScreenPreview() {
     val info = TunedStatus.TuningInfo(
         note = Note.B,
-        pitchDifference = 0.1
+        pitchDifference = 0.1,
     )
     SkipjackTheme {
         PitchMeterScreen(info)

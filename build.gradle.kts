@@ -16,8 +16,14 @@ subprojects {
             targetExclude("$buildDir/**/*.kt")
             targetExclude("bin/**/*.kt")
 
-            ktlint(libs.versions.ktlint.get())
-            licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+            ktlint(libs.versions.ktlint.get()).editorConfigOverride(
+                mapOf(
+                    "ktlint_official" to "disabled",
+                    "ktlint_standard_package-name" to "disabled",
+                    "ktlint_standard_filename" to "disabled",
+                    "ktlint_function_naming_ignore_when_annotated_with" to "Composable"
+                )
+            )
         }
     }
 }
