@@ -105,7 +105,6 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 35
-        target: android-wear
         script: |
           sdkmanager --list | grep "system-images"
           ./gradlew :app:connectedReleaseAndroidTest
