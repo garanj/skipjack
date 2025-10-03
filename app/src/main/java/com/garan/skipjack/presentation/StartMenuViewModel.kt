@@ -15,28 +15,24 @@
  */
 package com.garan.skipjack.presentation
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.wear.tiles.TileService
 import com.garan.skipjack.datastore.Settings
 import com.garan.skipjack.definitions.TuningConfig
-import com.garan.skipjack.tile.QuickAccessTile
+import com.garan.skipjack.tile.TileUpdater
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class StartMenuViewModel @Inject constructor(
-    @param:ApplicationContext val context: Context,
+    private val tileUpdater: TileUpdater,
     private val settings: Settings,
 ) : ViewModel() {
     fun setMostRecentConfig(config: TuningConfig) {
         viewModelScope.launch {
             settings.setMostRecentInstrument(config)
-            TileService.getUpdater(context)
-                .requestUpdate(QuickAccessTile::class.java)
+            tileUpdater.requestUpdate()
         }
     }
 }
