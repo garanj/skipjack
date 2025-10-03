@@ -104,7 +104,7 @@ jobs:
       - name: Run instrumented tests on a release build
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 36
+          api-level: 35-ext15
           target: android-wear-signed
           arch: x86_64
           script: ./gradlew :app:connectedReleaseAndroidTest
