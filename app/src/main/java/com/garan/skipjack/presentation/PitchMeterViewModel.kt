@@ -20,18 +20,27 @@ import androidx.lifecycle.viewModelScope
 import com.garan.skipjack.TuningRepository
 import com.garan.skipjack.definitions.TuningConfig
 import com.garan.skipjack.model.TunedStatus
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
-@HiltViewModel
-class PitchMeterViewModel @Inject constructor(private val tuningRepository: TuningRepository) : ViewModel() {
+@HiltViewModel(assistedFactory = PitchMeterViewModel.Factory::class)
+class PitchMeterViewModel @AssistedInject constructor(
+    private val tuningRepository: TuningRepository,
+    @Assisted private val tuningConfig: TuningConfig,
+) : ViewModel() {
+    @AssistedFactory
+    interface Factory {
+        fun create(tuningConfig: TuningConfig): PitchMeterViewModel
+    }
 
     val tuningStatusFlow = tuningRepository.tuningStatusFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TunedStatus.NoTuningInfo)
 
-    fun setTuningNoteGroup(tuningConfig: TuningConfig) {
+    init {
         tuningRepository.setTuningConfig(tuningConfig)
     }
 }
