@@ -30,6 +30,6 @@ class AppLaunchTest {
 
     @Test
     fun appLaunchesAndDisplaysStartMenu() {
-        composeTestRule.onNodeWithText("Instruments").assertIsDisplayed()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.instruments)).assertIsDisplayed()
     }
 }
