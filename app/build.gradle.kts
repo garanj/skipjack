@@ -64,6 +64,8 @@ android {
         }
     }
     namespace = "com.garan.skipjack"
+
+    testBuildType = "release"
 }
 
 dependencies {
