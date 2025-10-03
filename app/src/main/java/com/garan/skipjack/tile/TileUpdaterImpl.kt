@@ -23,7 +23,7 @@ import javax.inject.Singleton
 
 @Singleton
 class TileUpdaterImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : TileUpdater {
     override fun requestUpdate() {
         TileService.getUpdater(context)

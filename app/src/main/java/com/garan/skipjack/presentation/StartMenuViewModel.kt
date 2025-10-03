@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StartMenuViewModel @Inject constructor(
-    @ApplicationContext val context: Context,
+    @param:ApplicationContext val context: Context,
     private val settings: Settings,
 ) : ViewModel() {
     fun setMostRecentConfig(config: TuningConfig) {
