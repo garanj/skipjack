@@ -105,7 +105,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35-ext15
-          target: android-wear-signed
+          target: android-wear
           arch: x86_64
           script: ./gradlew :app:connectedReleaseAndroidTest
         env:
