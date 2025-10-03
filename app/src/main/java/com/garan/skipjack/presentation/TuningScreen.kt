@@ -35,7 +35,6 @@ fun TuningScreen(
     val permissionState = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
 
     if (permissionState.status == PermissionStatus.Granted) {
-
         val tunedStatus by viewModel.tuningStatusFlow.collectAsState()
         PitchMeterScreen(status = tunedStatus)
         LaunchedEffect(Unit) {
