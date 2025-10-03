@@ -90,6 +90,7 @@ jobs:
       - name: List SDK Packages
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          api-level: 35
           script: $ANDROID_HOME/tools/bin/sdkmanager --list
 
   instrumentedTests:
