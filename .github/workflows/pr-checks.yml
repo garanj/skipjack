@@ -79,7 +79,7 @@ jobs:
       run: ./gradlew :app:testDebugUnitTest
 
   instrumentedTests:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 17
@@ -105,6 +105,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 35
+        arch: x86_64
         script: |
           sdkmanager --list | grep "system-images"
           ./gradlew :app:connectedReleaseAndroidTest
