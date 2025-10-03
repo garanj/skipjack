@@ -24,8 +24,6 @@ import com.garan.skipjack.definitions.TuningConfig
 import com.garan.skipjack.tile.QuickAccessTile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +32,6 @@ class StartMenuViewModel @Inject constructor(
     @ApplicationContext val context: Context,
     private val settings: Settings,
 ) : ViewModel() {
-
-    val mostRecentConfig = settings.mostRecentInstrument
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TuningConfig.WHOLE_NOTES)
-
     fun setMostRecentConfig(config: TuningConfig) {
         viewModelScope.launch {
             settings.setMostRecentInstrument(config)
