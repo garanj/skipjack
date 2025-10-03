@@ -79,7 +79,7 @@ jobs:
         run: ./gradlew :app:testDebugUnitTest
 
   instrumentedTests:
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
