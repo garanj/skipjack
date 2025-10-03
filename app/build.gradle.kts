@@ -18,6 +18,22 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("SIGNING_KEYSTORE_PATH")
+            val keystorePassword = System.getenv("SIGNING_KEYSTORE_PASSWORD")
+            val keyAliasName = System.getenv("SIGNING_KEY_ALIAS")
+            val keyPasswordValue = System.getenv("SIGNING_KEY_PASSWORD")
+
+            if (keystorePath != null && keystorePassword != null && keyAliasName != null && keyPasswordValue != null) {
+                storeFile = file(keystorePath)
+                storePassword = keystorePassword
+                keyAlias = keyAliasName
+                keyPassword = keyPasswordValue
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -26,6 +42,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     
@@ -44,6 +61,8 @@ android {
         }
     }
     namespace = "com.garan.skipjack"
+
+    testBuildType = "release"
 }
 
 dependencies {
