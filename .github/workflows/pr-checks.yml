@@ -104,10 +104,9 @@ jobs:
     - name: Run instrumented tests on a release build
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 35
+        api-level: 36
         arch: x86_64
         script: |
-          sdkmanager --list | grep "system-images"
           ./gradlew :app:connectedReleaseAndroidTest
       env:
         SIGNING_KEYSTORE_PATH: ${{ github.workspace }}/keystore.jks
