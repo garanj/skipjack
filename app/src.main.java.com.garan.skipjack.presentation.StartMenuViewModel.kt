@@ -17,30 +17,28 @@ package com.garan.skipjack.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.garan.skipjack.TuningRepository
+import com.garan.skipjack.datastore.Settings
 import com.garan.skipjack.definitions.TuningConfig
-import com.garan.skipjack.model.TunedStatus
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import com.garan.skipjack.tile.TileUpdater
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-@HiltViewModel(assistedFactory = PitchMeterViewModel.Factory::class)
-class PitchMeterViewModel @AssistedInject constructor(
-    private val tuningRepository: TuningRepository,
-    @Assisted private val tuningConfig: TuningConfig,
+@HiltViewModel
+class StartMenuViewModel @Inject constructor(
+    private val settings: Settings,
+    private val tileUpdater: TileUpdater,
 ) : ViewModel() {
-    @AssistedFactory
-    interface Factory {
-        fun create(tuningConfig: TuningConfig): PitchMeterViewModel
-    }
 
-    val tuningStatusFlow = tuningRepository.tuningStatusFlow
+    val mostRecentConfig = settings.mostRecentInstrument
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TunedStatus.NoTuningInfo)
 
-    init {
-        tuningRepository.setTuningConfig(tuningConfig)
+    fun setMostRecentConfig(config: TuningConfig) {
+        viewModelScope.launch {
+            settings.setMostRecentInstrument(config)
+            tileUpdater.requestUpdate()
+        }
     }
 }

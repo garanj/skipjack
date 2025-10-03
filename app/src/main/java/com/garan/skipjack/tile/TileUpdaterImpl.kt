@@ -13,31 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.garan.skipjack
+package com.garan.skipjack.tile
 
 import android.content.Context
-import com.garan.skipjack.audio.MicAudioSource
-import com.garan.skipjack.tile.TileUpdater
-import com.garan.skipjack.tile.TileUpdaterImpl
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
+import androidx.wear.tiles.TileService
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-class ProviderModule {
-    @Singleton
-    @Provides
-    fun providesTuningRepository(micAudioSource: MicAudioSource) = TuningRepository(micAudioSource)
-
-    @Singleton
-    @Provides
-    fun providesAudioSource(@ApplicationContext appContext: Context) = MicAudioSource(appContext)
-
-    @Singleton
-    @Provides
-    fun providesTileUpdater(impl: TileUpdaterImpl): TileUpdater = impl
+@Singleton
+class TileUpdaterImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
+) : TileUpdater {
+    override fun requestUpdate() {
+        TileService.getUpdater(context)
+            .requestUpdate(QuickAccessTile::class.java)
+    }
 }
