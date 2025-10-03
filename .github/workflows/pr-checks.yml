@@ -106,7 +106,7 @@ jobs:
         with:
           api-level: 35-ext15
           target: android-wear
-          arch: x86_64
+          arch: arm64-v8a
           script: ./gradlew :app:connectedReleaseAndroidTest
         env:
           SIGNING_KEYSTORE_PATH: ${{ github.workspace }}/keystore.jks
