@@ -79,7 +79,7 @@ jobs:
       run: ./gradlew :app:testDebugUnitTest
 
   instrumentedTests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 17
@@ -101,14 +101,15 @@ jobs:
     - name: Decode signing keystore
       run: |
         echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/keystore.jks
+    - name: List SDK Packages
+      run: $ANDROID_HOME/tools/bin/sdkmanager --list
     - name: Run instrumented tests on a release build
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 36
+        api-level: 35
         target: android-wear
         arch: x86
-        script: |
-          ./gradlew :app:connectedReleaseAndroidTest
+        script: ./gradlew :app:connectedReleaseAndroidTest
       env:
         SIGNING_KEYSTORE_PATH: ${{ github.workspace }}/keystore.jks
         SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
