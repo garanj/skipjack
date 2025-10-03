@@ -17,6 +17,8 @@ package com.garan.skipjack
 
 import android.content.Context
 import com.garan.skipjack.audio.MicAudioSource
+import com.garan.skipjack.tile.TileUpdater
+import com.garan.skipjack.tile.TileUpdaterImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,4 +36,8 @@ class ProviderModule {
     @Singleton
     @Provides
     fun providesAudioSource(@ApplicationContext appContext: Context) = MicAudioSource(appContext)
+
+    @Singleton
+    @Provides
+    fun providesTileUpdater(impl: TileUpdaterImpl): TileUpdater = impl
 }
