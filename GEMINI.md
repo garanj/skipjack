@@ -36,6 +36,6 @@ SkipJack is a Wear OS application that helps users tune musical instruments. It 
 
 ## Building the project
 
-*   Check the project builds using ./gradle :app:assembleDebug
+*   Check the project builds using ./gradlew :app:assembleDebug
 *   Check for spotless issues using ./gradlew :app:spotlessCheck
 *   Do both of these after making changes to the code, to verify correctness.
