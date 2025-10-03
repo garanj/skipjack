@@ -101,14 +101,14 @@ jobs:
     - name: Decode signing keystore
       run: |
         echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/keystore.jks
-    - name: List available system images
-      run: sdkmanager --list | grep "system-images"
     - name: Run instrumented tests on a release build
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 35
         target: android-wear
-        script: ./gradlew :app:connectedReleaseAndroidTest
+        script: |
+          sdkmanager --list | grep "system-images"
+          ./gradlew :app:connectedReleaseAndroidTest
       env:
         SIGNING_KEYSTORE_PATH: ${{ github.workspace }}/keystore.jks
         SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
