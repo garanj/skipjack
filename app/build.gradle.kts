@@ -35,6 +35,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            isDefault = true
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -61,8 +64,6 @@ android {
         }
     }
     namespace = "com.garan.skipjack"
-
-    testBuildType = "release"
 }
 
 dependencies {
@@ -116,5 +117,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.compose.ui.test)
     debugImplementation(libs.compose.ui.test.manifest)
 }
