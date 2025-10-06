@@ -32,7 +32,7 @@ jobs:
       - name: Run spotless check
         run: ./gradlew :app:spotlessCheck
 
-  debugBuild:
+  releaseBuild:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -50,10 +50,18 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/libs.versions.toml', '**/*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Decode signing keystore
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/keystore.jks
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build debug APK
-        run: ./gradlew :app:assembleDebug
+      - name: Build release APK
+        run: ./gradlew :app:assembleRelease
+        env:
+          SIGNING_KEYSTORE_PATH: ${{ github.workspace }}/keystore.jks
+          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
   unitTests:
     runs-on: ubuntu-latest
@@ -98,18 +106,10 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Decode signing keystore
-        run: |
-          echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/keystore.jks
-      - name: Run instrumented tests on a release build
+      - name: Run instrumented tests on a debug build
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35-ext15
           target: android-wear
           arch: x86_64
-          script: ./gradlew :app:connectedReleaseAndroidTest
-        env:
-          SIGNING_KEYSTORE_PATH: ${{ github.workspace }}/keystore.jks
-          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          script: ./gradlew :app:connectedDebugAndroidTest

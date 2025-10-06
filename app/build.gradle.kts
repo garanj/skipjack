@@ -35,6 +35,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            isDefault = true
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -61,8 +64,6 @@ android {
         }
     }
     namespace = "com.garan.skipjack"
-
-    testBuildType = "release"
 }
 
 dependencies {
