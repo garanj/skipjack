@@ -118,9 +118,12 @@ jobs:
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          api-level: 35-ext15
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
+          disable-animations: true
+          target: android-wear
+          arch: x86_64
           script: echo "Generated AVD snapshot for caching."
       - name: Build debug build
         run: ./gradlew :app:assembleDebug
