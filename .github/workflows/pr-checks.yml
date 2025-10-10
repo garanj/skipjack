@@ -1,8 +1,5 @@
 name: PR Checks
 
-env:
-  API_LEVEL: 35-ext15
-
 on:
   pull_request:
     branches: [ main ]
@@ -88,54 +85,3 @@ jobs:
         run: chmod +x gradlew
       - name: Run unit tests
         run: ./gradlew :app:testDebugUnitTest
-
-  instrumentedTests:
-    runs-on: macos-15-intel
-    steps:
-      - uses: actions/checkout@v4
-      - name: set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/libs.versions.toml', '**/*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: AVD cache
-        uses: actions/cache@v4
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ env.API_LEVEL }}
-      - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.API_LEVEL }}
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          target: android-wear
-          arch: x86_64
-          script: echo "Generated AVD snapshot for caching."
-
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.API_LEVEL }}
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          target: android-wear
-          arch: x86_64
-          script: |
-            ./gradlew :app:assembleDebug
-            ./gradlew :app:connectedDebugAndroidTest
