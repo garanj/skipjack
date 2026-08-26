@@ -26,6 +26,7 @@ import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
@@ -35,8 +36,6 @@ import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.garan.skipjack.R
 import com.garan.skipjack.definitions.TuningConfig
 import com.garan.skipjack.theme.SkipjackTheme
-import com.google.android.horologist.compose.layout.ColumnItemType
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 
 @Composable
 fun StartMenuScreen(
@@ -51,12 +50,6 @@ fun StartMenuScreen(
 
     ScreenScaffold(
         scrollState = listState,
-        // Use workaround from Horologist for padding or wait until fix lands
-        contentPadding =
-        rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.IconButton,
-        ),
     ) { contentPadding ->
         TransformingLazyColumn(
             state = listState,
@@ -67,7 +60,8 @@ fun StartMenuScreen(
                     modifier =
                     Modifier
                         .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec),
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
                     transformation = SurfaceTransformation(transformationSpec),
                 ) { Text(text = stringResource(R.string.instruments)) }
             }
@@ -75,7 +69,8 @@ fun StartMenuScreen(
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec),
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                     transformation = SurfaceTransformation(transformationSpec),
                     onClick = { onTuningClick(TuningConfig.WHOLE_NOTES) },
                 ) {
@@ -86,7 +81,8 @@ fun StartMenuScreen(
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec),
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                     transformation = SurfaceTransformation(transformationSpec),
                     onClick = { onTuningClick(TuningConfig.ALL_NOTES) },
                 ) {
@@ -100,7 +96,8 @@ fun StartMenuScreen(
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .transformedHeight(this, transformationSpec),
+                                .transformedHeight(this, transformationSpec)
+                                .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                             transformation = SurfaceTransformation(transformationSpec),
                             colors = ButtonDefaults.filledTonalButtonColors(),
                             onClick = {

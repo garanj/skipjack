@@ -15,7 +15,8 @@
  */
 package com.garan.skipjack.navigation
 
-enum class Screens(val route: String) {
-    START_MENU("start_menu"),
-    TUNING_SCREEN("tuning"),
-}
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object StartMenu : NavKey
