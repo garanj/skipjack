@@ -1,20 +1,20 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     alias(libs.plugins.com.google.devtools.ksp)
     alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.org.jetbrains.kotlin.serialization)
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.garan.skipjack"
         minSdk = 30
         targetSdk = 35
-        versionCode = 7
-        versionName = "1.4.0"
+        versionCode = 8
+        versionName = "1.5.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,13 +50,10 @@ android {
     }
     
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(21)
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     packaging {
         resources {
@@ -73,9 +70,15 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.wear.compose.material3)
     implementation(libs.wear.compose.foundation)
+    implementation(libs.wear.compose.navigation)
+    implementation(libs.wear.compose.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.ui.tooling.preview)
@@ -93,14 +96,14 @@ dependencies {
     implementation(libs.tarsos.dsp.core)
     implementation(libs.tarsos.dsp.jvm)
 
-    // Horologist
-    implementation(libs.horologist.compose.layout)
-    implementation(libs.horologist.compose.material)
-
     // Tiles
     implementation(libs.androidx.tiles.material)
     implementation(libs.androidx.tiles)
-    implementation(libs.horologist.tiles)
+    implementation(libs.androidx.protolayout.material3)
+    implementation(libs.androidx.protolayout.expression)
+    implementation(libs.androidx.tiles.tooling.preview)
+    debugImplementation(libs.androidx.tiles.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
 
     // Datastore
     implementation(libs.androidx.datastore)

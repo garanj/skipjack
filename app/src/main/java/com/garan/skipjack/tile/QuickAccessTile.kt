@@ -18,31 +18,37 @@ package com.garan.skipjack.tile
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import androidx.core.graphics.toColorInt
 import androidx.wear.protolayout.ActionBuilders
-import androidx.wear.protolayout.ColorBuilders
-import androidx.wear.protolayout.DeviceParametersBuilders
-import androidx.wear.protolayout.DimensionBuilders
 import androidx.wear.protolayout.DimensionBuilders.dp
+import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.LayoutElementBuilders.LayoutElement
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.material.Chip
-import androidx.wear.protolayout.material.ChipColors
-import androidx.wear.protolayout.material.CompactChip
-import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.material3.ButtonDefaults
+import androidx.wear.protolayout.material3.ColorScheme
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.protolayout.material3.button
+import androidx.wear.protolayout.material3.compactButton
+import androidx.wear.protolayout.material3.icon
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.types.argb
+import androidx.wear.protolayout.types.layoutString
+import androidx.wear.tiles.Material3TileService
 import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.garan.skipjack.EXTRA_TUNING_CONFIG_NAME
 import com.garan.skipjack.MainActivity
 import com.garan.skipjack.R
 import com.garan.skipjack.TuningActivity
 import com.garan.skipjack.datastore.Settings
 import com.garan.skipjack.definitions.TuningConfig
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.tiles.SuspendingTileService
-import com.google.android.horologist.tiles.images.drawableResToImageResource
 import kotlinx.coroutines.flow.first
 
 const val RESOURCES_VERSION = "100"
@@ -50,15 +56,12 @@ const val RECENT_INSTRUMENT_BUTTON_ID = "RECENT_INSTRUMENT_BUTTON_ID"
 const val WHOLE_NOTES_BUTTON_ID = "WHOLE_NOTES_BUTTON_ID"
 const val MORE_BUTTON_ID = "MORE_BUTTON_ID"
 
-@OptIn(ExperimentalHorologistApi::class)
-class QuickAccessTile : SuspendingTileService() {
+class QuickAccessTile :
+    Material3TileService(
+        allowDynamicTheme = false,
+        defaultColorScheme = tileColorScheme,
+    ) {
     private val settings by lazy { Settings(this) }
-
-    private val primaryColor = "#F6D70B".toColorInt()
-    private val onPrimaryColor = "#000000".toColorInt()
-
-    private val lastInstrumentIconId = "last_instrument_id"
-    private val wholeNotesIconId = "whole_notes_icon_id"
 
     private val buttonIds = setOf(
         RECENT_INSTRUMENT_BUTTON_ID,
@@ -66,21 +69,21 @@ class QuickAccessTile : SuspendingTileService() {
         MORE_BUTTON_ID,
     )
 
-    override suspend fun tileRequest(requestParams: RequestBuilders.TileRequest): TileBuilders.Tile {
+    override suspend fun MaterialScope.tileResponse(requestParams: RequestBuilders.TileRequest): TileBuilders.Tile {
         val recentInstrument = settings.mostRecentInstrument.first()
 
         // This is a workaround to build a backstack containing the parent activity when launching
         // a Tile.
         if (requestParams.currentState.lastClickableId in buttonIds) {
             val intent = when (requestParams.currentState.lastClickableId) {
-                RECENT_INSTRUMENT_BUTTON_ID -> Intent(this, TuningActivity::class.java).apply {
+                RECENT_INSTRUMENT_BUTTON_ID -> Intent(this@QuickAccessTile, TuningActivity::class.java).apply {
                     putExtra(EXTRA_TUNING_CONFIG_NAME, recentInstrument.name)
                 }
 
-                WHOLE_NOTES_BUTTON_ID -> Intent(this, TuningActivity::class.java)
-                else -> Intent(this, MainActivity::class.java)
+                WHOLE_NOTES_BUTTON_ID -> Intent(this@QuickAccessTile, TuningActivity::class.java)
+                else -> Intent(this@QuickAccessTile, MainActivity::class.java)
             }
-            TaskStackBuilder.create(this)
+            TaskStackBuilder.create(this@QuickAccessTile)
                 .addNextIntentWithParentStack(intent)
                 .startActivities()
         }
@@ -89,97 +92,109 @@ class QuickAccessTile : SuspendingTileService() {
             .setResourcesVersion(RESOURCES_VERSION)
             .setTileTimeline(
                 TimelineBuilders.Timeline.fromLayoutElement(
-                    buildLayout(requestParams.deviceConfiguration, recentInstrument),
+                    buildLayout(recentInstrument),
                 ),
             )
             .build()
     }
 
-    override suspend fun resourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ResourceBuilders.Resources = ResourceBuilders.Resources.Builder()
-        .setVersion(RESOURCES_VERSION)
-        .addIdToImageMapping(
-            lastInstrumentIconId,
-            drawableResToImageResource(R.drawable.baseline_music_note_24),
-        )
-        .addIdToImageMapping(
-            wholeNotesIconId,
-            drawableResToImageResource(R.drawable.baseline_piano_24),
-        )
-        .build()
-
-    private fun buildLayout(
-        deviceParameters: DeviceParametersBuilders.DeviceParameters,
-        recentInstrument: TuningConfig,
-    ): PrimaryLayout {
-        val lastInstrument = Instrument(
-            label = getString(recentInstrument.labelResId),
-            iconId = lastInstrumentIconId,
-            clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID),
-        )
-        val wholeNotes = Instrument(
-            label = getString(R.string.instrument_def_whole_notes),
-            iconId = wholeNotesIconId,
-            clickable = createClickable(WHOLE_NOTES_BUTTON_ID),
-        )
-
-        return PrimaryLayout.Builder(deviceParameters)
-            .setResponsiveContentInsetEnabled(true)
-            .setContent(
-                LayoutElementBuilders.Column.Builder()
-                    .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-                    .addContent(instrumentChip(this, deviceParameters, lastInstrument))
-                    .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(4f)).build())
-                    .addContent(instrumentChip(this, deviceParameters, wholeNotes))
-                    .build(),
-            )
-            .setPrimaryChipContent(
-                CompactChip.Builder(
-                    this,
-                    getString(R.string.tile_more_button),
-                    createClickable(MORE_BUTTON_ID),
-                    deviceParameters,
-                )
-                    .setChipColors(
-                        ChipColors(
-                            /*backgroundColor=*/
-                            ColorBuilders.argb(primaryColor),
-                            /*contentColor=*/
-                            ColorBuilders.argb(onPrimaryColor),
-                        ),
-                    )
-                    .build(),
-            )
-            .build()
-    }
-
-    private fun createClickable(actionId: String) = ModifiersBuilders.Clickable.Builder()
-        .setId(actionId)
-        .setOnClick(
-            ActionBuilders.LoadAction.Builder().build(),
-        )
-        .build()
-
-    private fun instrumentChip(
-        context: Context,
-        deviceParameters: DeviceParametersBuilders.DeviceParameters,
-        instrument: Instrument,
-    ): Chip = Chip.Builder(context, instrument.clickable, deviceParameters)
-        .setWidth(DimensionBuilders.ExpandedDimensionProp.Builder().build())
-        .setIconContent(instrument.iconId)
-        .setPrimaryLabelContent(instrument.label)
-        .setChipColors(
-            ChipColors(
-                /*backgroundColor=*/
-                ColorBuilders.argb(primaryColor),
-                /*contentColor=*/
-                ColorBuilders.argb(onPrimaryColor),
-            ),
-        )
-        .build()
-
     data class Instrument(
         val label: String,
-        val iconId: String,
+        val resourceId: Int,
         val clickable: ModifiersBuilders.Clickable,
     )
 }
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun tilePreview(context: Context) = TilePreviewData { request ->
+    TileBuilders.Tile.Builder()
+        .setResourcesVersion(RESOURCES_VERSION)
+        .setTileTimeline(
+            TimelineBuilders.Timeline.fromLayoutElement(
+                materialScope(context, request.deviceConfiguration, defaultColorScheme = tileColorScheme) {
+                    buildLayout(TuningConfig.GUITAR)
+                },
+            ),
+        )
+        .build()
+}
+
+private val tileColorScheme = ColorScheme(
+    primary = 0xFFF6D70B.toInt().argb,
+    onPrimary = 0xFF000000.toInt().argb,
+    secondary = 0xFF8BC34A.toInt().argb,
+    onSecondary = 0xFF000000.toInt().argb,
+    surfaceContainer = 0xFF404040.toInt().argb,
+    onSurface = 0xFFF6D70B.toInt().argb,
+)
+
+private fun MaterialScope.buildLayout(
+    recentInstrument: TuningConfig,
+): LayoutElement {
+    val lastInstrument = QuickAccessTile.Instrument(
+        label = context.getString(recentInstrument.labelResId),
+        resourceId = R.drawable.baseline_music_note_24,
+        clickable = createClickable(RECENT_INSTRUMENT_BUTTON_ID),
+    )
+    val wholeNotes = QuickAccessTile.Instrument(
+        label = context.getString(R.string.instrument_def_whole_notes),
+        resourceId = R.drawable.baseline_piano_24,
+        clickable = createClickable(WHOLE_NOTES_BUTTON_ID),
+    )
+
+    return primaryLayout(
+        mainSlot = {
+            LayoutElementBuilders.Column.Builder()
+                .setWidth(expand())
+                .addContent(
+                    ButtonDefaults.run {
+                        button(
+                            onClick = lastInstrument.clickable,
+                            labelContent = { text(lastInstrument.label.layoutString) },
+                            iconContent = { icon(lastInstrument.resourceId.toImageResource()) },
+                            width = expand(),
+                            colors = filledButtonColors(),
+                        )
+                    },
+                )
+                .addContent(LayoutElementBuilders.Spacer.Builder().setHeight(dp(4f)).build())
+                .addContent(
+                    ButtonDefaults.run {
+                        button(
+                            onClick = wholeNotes.clickable,
+                            labelContent = { text(wholeNotes.label.layoutString) },
+                            iconContent = { icon(wholeNotes.resourceId.toImageResource()) },
+                            width = expand(),
+                            colors = filledButtonColors(),
+                        )
+                    },
+                )
+                .build()
+        },
+        bottomSlot = {
+            ButtonDefaults.run {
+                compactButton(
+                    onClick = createClickable(MORE_BUTTON_ID),
+                    labelContent = { text(context.getString(R.string.tile_more_button).layoutString) },
+                    colors = filledTonalButtonColors(),
+                )
+            }
+        },
+    )
+}
+
+private fun createClickable(actionId: String) = ModifiersBuilders.Clickable.Builder()
+    .setId(actionId)
+    .setOnClick(
+        ActionBuilders.LoadAction.Builder().build(),
+    )
+    .build()
+
+private fun Int.toImageResource() = ResourceBuilders.ImageResource.Builder()
+    .setAndroidResourceByResId(
+        ResourceBuilders.AndroidImageResourceByResId.Builder()
+            .setResourceId(this)
+            .build(),
+    )
+    .build()
